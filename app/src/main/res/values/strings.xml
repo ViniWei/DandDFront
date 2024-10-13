@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DandDFront</string>
+    <string name="title_text">Dungeons and Dragons</string>
+    <string name="create_character_button_text">Criar Personagem</string>
+    <string name="list_characters_button_text">Personagens</string>
+    <string name="create_text">Criar</string>
+</resources>
