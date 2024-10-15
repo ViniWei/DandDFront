@@ -14,11 +14,14 @@ class CharacterShowActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var bundle = getIntent().getStringExtra("bundle")
-
         var raceName = "Elfo da silva"
         if (getIntent().getStringExtra("race") != null) {
            raceName = getIntent().getStringExtra("race").toString()
+        }
+
+        var vida = "0"
+        if (getIntent().getStringExtra("vida") != null) {
+            vida = getIntent().getStringExtra("vida").toString()
         }
 
         var forca = "0"
@@ -55,6 +58,7 @@ class CharacterShowActivity : ComponentActivity() {
             Column {
                 Text(text = "Raca: $raceName")
                 Spacer(modifier = Modifier.height(10.dp))
+                Text(text = "Vida: $vida")
                 Text(text = "Força: $forca")
                 Text(text = "Destreza: $destreza")
                 Text(text = "Constituição: $constituicao")

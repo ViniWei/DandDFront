@@ -67,10 +67,6 @@ class CharacterCreationActivity : ComponentActivity() {
                 }
 
                 Spacer(Modifier.height(25.dp))
-
-                raceDisplay()
-
-                Spacer(Modifier.height(25.dp))
                 allStats()
 
                 createButton()
@@ -123,17 +119,27 @@ fun statusSelector(statusName : String, status : Int) {
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(Modifier.width(8.dp))
-        Text(
-            text = status.toString(),
-            style = MaterialTheme.typography.titleMedium
-        )
         Button(onClick = {
-
+            when(statusName) {
+                "Força" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.forca -= 1 }
+                "Destreza" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.destreza -= 1 }
+                "Constituicao" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.constituicao -= 1 }
+                "sabedoria" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.sabedoria -= 1 }
+                "carisma" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.carisma -= 1 }
+            }
         }) {
-            Text("Lower")
+            Text("Diminuir")
         }
-        Button(onClick = { println(statusName) }) {
-            Text("Higher")
+        Button(onClick = {
+            when(statusName) {
+                "Força" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.forca += 1 }
+                "Destreza" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.destreza += 1 }
+                "Constituicao" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.constituicao += 1 }
+                "sabedoria" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.sabedoria += 1 }
+                "carisma" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.carisma += 1 }
+            }
+        }) {
+            Text("Aumentar")
         }
     }
 }
@@ -143,11 +149,14 @@ fun createButton() {
     val context = LocalContext.current;
 
     Button(onClick = {
+        character.iniciarPersonagem()
+
         val intent = Intent(context, CharacterShowActivity::class.java)
 
         var bundle = Bundle()
         bundle.putString("race", character.raca.name)
 
+        bundle.putString("vida", character.getVida().toString())
         bundle.putString("forca", character.forca.toString())
         bundle.putString("destreza", character.destreza.toString())
         bundle.putString("constituicao", character.constituicao.toString())
