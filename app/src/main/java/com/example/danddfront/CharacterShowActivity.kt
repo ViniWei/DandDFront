@@ -1,21 +1,18 @@
 package com.example.danddfront
 
-import DandDService.Personagem
-import DatabaseHelper
+import com.example.danddfront.Data.DatabaseHelper
 import android.content.Context
-import android.database.Cursor
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import com.example.danddfront.Data.CharacterModel
 
 class CharacterShowActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +25,7 @@ class CharacterShowActivity : ComponentActivity() {
         }
     }
 
-    fun getCharacterStats(characterId: String?, context: Context): String? {
+    fun getCharacterStats(characterId: String?, context: Context): CharacterModel? {
         if (characterId == null) {
             Toast.makeText(context, "Character ID: $characterId not found", Toast.LENGTH_LONG).show()
             return null;
@@ -40,28 +37,37 @@ class CharacterShowActivity : ComponentActivity() {
         val cursor = db.rawQuery("SELECT * FROM ${dbHelper.CHARACTER_DATABASE_NAME} WHERE id = $characterId", null);
         var raca: String? = null;
 
+        val characterModel = CharacterModel()
+
         if (cursor.moveToFirst()) {
-            raca = cursor.getString(cursor.getColumnIndex("raca"))
+            characterModel.raca = cursor.getString(cursor.getColumnIndex("raca"))
+            characterModel.vida = cursor.getInt(cursor.getColumnIndex("vida"))
+            characterModel.forca = cursor.getInt(cursor.getColumnIndex("forca"))
+            characterModel.destreza = cursor.getInt(cursor.getColumnIndex("destreza"))
+            characterModel.constituicao = cursor.getInt(cursor.getColumnIndex("constituicao"))
+            characterModel.inteligencia = cursor.getInt(cursor.getColumnIndex("inteligencia"))
+            characterModel.sabedoria = cursor.getInt(cursor.getColumnIndex("sabedoria"))
+            characterModel.carisma = cursor.getInt(cursor.getColumnIndex("carisma"))
         }
         db.close()
         cursor.close()
 
-        return raca;
+        return characterModel;
     }
 
     @Composable
     fun stats() {
         val characterId = getIntent().getStringExtra("characterId")
-        val raca = getCharacterStats(characterId, LocalContext.current)
+        val character = getCharacterStats(characterId, LocalContext.current)
 
-        Text(text = "Raca: $raca")
+        Text(text = "Raca: ${character?.raca}")
         //Spacer(modifier = Modifier.height(10.dp))
-        //Text(text = "Vida: $vida")
-        //Text(text = "Força: $forca")
-        //Text(text = "Destreza: $destreza")
-        //Text(text = "Constituição: $constituicao")
-        //Text(text = "Inteligencia: $inteligencia")
-        //Text(text = "Sabedoria: $sabedoria")
-        //Text(text = "Carisma: $carisma")
+        Text(text = "Vida: ${character?.vida}")
+        Text(text = "Força: ${character?.forca}")
+        Text(text = "Destreza: ${character?.destreza}")
+        Text(text = "Constituição: ${character?.constituicao}")
+        Text(text = "Inteligencia: ${character?.inteligencia}")
+        Text(text = "Sabedoria: ${character?.sabedoria}")
+        Text(text = "Carisma: ${character?.carisma}")
     }
 }

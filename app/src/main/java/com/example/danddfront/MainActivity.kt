@@ -15,5 +15,11 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, CharacterCreationActivity::class.java)
             startActivity(intent)
         }
+
+        val listButton : Button = findViewById<Button>(R.id.ListCharactersMenuButton)
+        listButton.setOnClickListener {
+            val intent = Intent(this, SelectCharacterActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

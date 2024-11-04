@@ -13,6 +13,11 @@
         android:theme="@style/Theme.DandDFront"
         tools:targetApi="31">
         <activity
+            android:name=".SelectCharacterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_select_character"
+            android:theme="@style/Theme.DandDFront"/>
+        <activity
             android:name=".CharacterShowActivity"
             android:exported="false"/>
         <activity

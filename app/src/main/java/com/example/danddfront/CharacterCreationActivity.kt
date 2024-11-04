@@ -2,7 +2,7 @@ package com.example.danddfront
 
 import DandDService.Personagem
 import DandDService.Racas.*;
-import DatabaseHelper
+import com.example.danddfront.Data.DatabaseHelper
 import android.content.ContentValues
 import android.content.Intent
 
