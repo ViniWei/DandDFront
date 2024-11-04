@@ -1,8 +1,9 @@
 package com.example.danddfront
 
 import DandDService.Personagem
-import DandDService.PersonagemAtributos
 import DandDService.Racas.*;
+import DatabaseHelper
+import android.content.ContentValues
 import android.content.Intent
 
 import android.os.Bundle
@@ -19,14 +20,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 
 val race = Humano();
 val character = Personagem(race);
@@ -151,21 +150,31 @@ fun createButton() {
     Button(onClick = {
         character.iniciarPersonagem()
 
+        //
+        var dbHelper = DatabaseHelper(context);
+        var db = dbHelper.writableDatabase
+
+        val values = ContentValues().apply {
+          put("raca", character.raca.name)
+          put("vida", character.getVida())
+          put("forca", character.forca)
+          put("destreza", character.destreza)
+          put("constituicao", character.constituicao)
+          put("inteligencia", character.inteligencia)
+          put("sabedoria", character.sabedoria)
+          put("carisma", character.carisma)
+        }
+
+        val newRowId = db.insert(dbHelper.CHARACTER_DATABASE_NAME, null, values)
+        println(newRowId);
+        db.close();
+        //
+
         val intent = Intent(context, CharacterShowActivity::class.java)
 
         var bundle = Bundle()
-        bundle.putString("race", character.raca.name)
-
-        bundle.putString("vida", character.getVida().toString())
-        bundle.putString("forca", character.forca.toString())
-        bundle.putString("destreza", character.destreza.toString())
-        bundle.putString("constituicao", character.constituicao.toString())
-        bundle.putString("inteligencia", character.inteligencia.toString())
-        bundle.putString("sabedoria", character.sabedoria.toString())
-        bundle.putString("carisma", character.carisma.toString())
-
+        bundle.putString("characterId", newRowId.toString())
         intent.putExtras(bundle)
-
         context.startActivity(intent)
     }) {
         Text("Criar")
