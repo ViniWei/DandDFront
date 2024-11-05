@@ -1,28 +1,9 @@
-package com.example.danddfront
+package com.example.danddfront.Data
 
-import com.example.danddfront.Data.DatabaseHelper
 import android.content.Context
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import com.example.danddfront.Data.CharacterModel
 
-class CharacterShowActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            Column {
-                stats()
-            }
-        }
-    }
-
+class CharacterService {
     fun getCharacterStats(characterId: String?, context: Context): CharacterModel? {
         if (characterId == null) {
             Toast.makeText(context, "Character ID: $characterId not found", Toast.LENGTH_LONG).show()
@@ -45,26 +26,11 @@ class CharacterShowActivity : ComponentActivity() {
             characterModel.inteligencia = cursor.getInt(cursor.getColumnIndex("inteligencia"))
             characterModel.sabedoria = cursor.getInt(cursor.getColumnIndex("sabedoria"))
             characterModel.carisma = cursor.getInt(cursor.getColumnIndex("carisma"))
+            characterModel.pontos = cursor.getInt(cursor.getColumnIndex("pontos"))
         }
         db.close()
         cursor.close()
 
         return characterModel;
-    }
-
-    @Composable
-    fun stats() {
-        val characterId = getIntent().getStringExtra("characterId")
-        val character = getCharacterStats(characterId, LocalContext.current)
-
-        Text(text = "Raca: ${character?.raca}")
-        //Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "Vida: ${character?.vida}")
-        Text(text = "Força: ${character?.forca}")
-        Text(text = "Destreza: ${character?.destreza}")
-        Text(text = "Constituição: ${character?.constituicao}")
-        Text(text = "Inteligencia: ${character?.inteligencia}")
-        Text(text = "Sabedoria: ${character?.sabedoria}")
-        Text(text = "Carisma: ${character?.carisma}")
     }
 }

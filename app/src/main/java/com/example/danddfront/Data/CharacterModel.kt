@@ -1,6 +1,7 @@
 package com.example.danddfront.Data;
 
 public class CharacterModel {
+    var pontos = 0;
     var vida = 0;
     var raca = "";
     var forca = 0;

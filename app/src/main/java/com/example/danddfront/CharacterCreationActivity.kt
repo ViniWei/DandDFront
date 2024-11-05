@@ -26,15 +26,52 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.danddfront.Data.CharacterService
 
 val race = Humano();
-val character = Personagem(race);
+var character = Personagem(race);
+var characterId : String? = null;
 
 class CharacterCreationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
+            characterId = getIntent().getStringExtra("characterId")
+            if (characterId != null) {
+                val characterService = CharacterService()
+                val char = characterService.getCharacterStats(characterId, LocalContext.current);
+
+                if (char != null) {
+                    val raca = when(char.raca) {
+                        "Humano" -> Humano()
+                        "AltoElfo" -> AltoElfo()
+                        "Anao" -> Anao()
+                        "AnaoColina" -> AnaoColina()
+                        "AnaoMontanha" -> AnaoMontanha()
+                        "Draconato" -> Draconato()
+                        "Drow" -> Drow()
+                        "Elfo" -> Elfo()
+                        "GnomoFloresta" -> GnomoFloresta()
+                        "GnomoRochas" -> GnomoRochas()
+                        "Halfling" -> Halfling()
+                        "HalflingPesLeves" -> HalflingPesLeves()
+                        "HalflingRobusto" -> HalflingRobusto()
+                        "MeioElfo" -> MeioElfo()
+                        "MeioOrc" -> MeioOrc()
+                        else -> Humano()
+                    }
+                    character = Personagem(raca)
+
+                    character.forca = char.forca
+                    character.destreza = char.destreza
+                    character.constituicao = char.constituicao
+                    character.inteligencia = char.inteligencia
+                    character.sabedoria = char.sabedoria
+                    character.carisma = char.carisma
+                    character.administradorAtributosPontos.pontos = char.pontos
+                }
+            }
+
             Column {
                 Title()
                 Spacer(Modifier.height(50.dp))
@@ -117,25 +154,31 @@ fun statusSelector(statusName : String, status : Int) {
             text = statusName,
             style = MaterialTheme.typography.titleMedium
         )
+
+        var stat = remember { mutableStateOf(status) }
+        Text(stat.value.toString())
+
         Spacer(Modifier.width(8.dp))
         Button(onClick = {
             when(statusName) {
-                "Força" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.forca -= 1 }
-                "Destreza" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.destreza -= 1 }
-                "Constituicao" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.constituicao -= 1 }
-                "sabedoria" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.sabedoria -= 1 }
-                "carisma" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(status)) { character.carisma -= 1 }
+                "Força" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.forca)) { character.forca -= 1; stat.value = character.forca }
+                "Destreza" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.destreza)) { character.destreza -= 1; stat.value = character.destreza  }
+                "Constituicao" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.constituicao)) { character.constituicao -= 1; stat.value = character.constituicao }
+                "inteligencia" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.inteligencia)) { character.inteligencia -= 1; stat.value = character.inteligencia }
+                "sabedoria" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.sabedoria)) { character.sabedoria -= 1; stat.value = character.sabedoria }
+                "carisma" -> if (character.administradorAtributosPontos.VerificarSubtracaoAtributoEaumentarPontos(character.carisma)) { character.carisma -= 1; stat.value = character.carisma }
             }
         }) {
             Text("Diminuir")
         }
         Button(onClick = {
             when(statusName) {
-                "Força" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.forca += 1 }
-                "Destreza" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.destreza += 1 }
-                "Constituicao" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.constituicao += 1 }
-                "sabedoria" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.sabedoria += 1 }
-                "carisma" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(status)) { character.carisma += 1 }
+                "Força" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.forca)) { character.forca += 1; stat.value = character.forca }
+                "Destreza" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.destreza)) { character.destreza += 1; stat.value = character.destreza  }
+                "Constituicao" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.constituicao)) { character.constituicao += 1; stat.value = character.constituicao }
+                "inteligencia" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.inteligencia)) { character.inteligencia += 1; stat.value = character.inteligencia }
+                "sabedoria" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.sabedoria)) { character.sabedoria += 1 ; stat.value = character.sabedoria  }
+                "carisma" -> if (character.administradorAtributosPontos.VerificarAdicaoAtributoEDiminuirPontos(character.carisma)) { character.carisma += 1 ; stat.value = character.carisma  }
             }
         }) {
             Text("Aumentar")
@@ -155,6 +198,7 @@ fun createButton() {
         var db = dbHelper.writableDatabase
 
         val values = ContentValues().apply {
+          put("pontos", character.administradorAtributosPontos.pontos)
           put("raca", character.raca.name)
           put("vida", character.getVida())
           put("forca", character.forca)
@@ -165,15 +209,21 @@ fun createButton() {
           put("carisma", character.carisma)
         }
 
-        val newRowId = db.insert(dbHelper.CHARACTER_TABLE_NAME, null, values)
-        println(newRowId);
+        var id: String = "";
+        if (characterId == null) {
+            id = db.insert(dbHelper.CHARACTER_TABLE_NAME, null, values).toString()
+        } else {
+            db.update(dbHelper.CHARACTER_TABLE_NAME, values, "id=?", arrayOf(characterId))
+            id = characterId as String
+        }
+
         db.close();
         //
 
         val intent = Intent(context, CharacterShowActivity::class.java)
 
         var bundle = Bundle()
-        bundle.putString("characterId", newRowId.toString())
+        bundle.putString("characterId", id.toString())
         intent.putExtras(bundle)
         context.startActivity(intent)
     }) {

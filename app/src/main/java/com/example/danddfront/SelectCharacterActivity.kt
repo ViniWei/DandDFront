@@ -52,6 +52,11 @@ fun characterList() {
                     }) {
                         Text("👁")
                     }
+                    Button(onClick = {
+                        editCharacter(context, id)
+                    }) {
+                        Text("✏️")
+                    }
                     FilledTonalButton(onClick = {
                         deleteCharacter(context, id);
                         val intent = Intent(context, SelectCharacterActivity::class.java)
@@ -88,6 +93,15 @@ fun listAllCharactersIds() : ArrayList<Int> {
 
 fun loadCharacter(context: Context, id: Int) {
     val intent = Intent(context, CharacterShowActivity::class.java)
+
+    var bundle = Bundle()
+    bundle.putString("characterId", id.toString())
+    intent.putExtras(bundle)
+    context.startActivity(intent)
+}
+
+fun editCharacter(context: Context, id: Int) {
+    val intent = Intent(context, CharacterCreationActivity::class.java)
 
     var bundle = Bundle()
     bundle.putString("characterId", id.toString())
