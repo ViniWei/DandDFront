@@ -7,10 +7,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.danddfront.Data.CharacterModel
 
@@ -34,7 +32,7 @@ class CharacterShowActivity : ComponentActivity() {
         val dbHelper = DatabaseHelper(context)
         val db = dbHelper.writableDatabase;
 
-        val cursor = db.rawQuery("SELECT * FROM ${dbHelper.CHARACTER_DATABASE_NAME} WHERE id = $characterId", null);
+        val cursor = db.rawQuery("SELECT * FROM ${dbHelper.CHARACTER_TABLE_NAME} WHERE id = $characterId", null);
         var raca: String? = null;
 
         val characterModel = CharacterModel()

@@ -165,7 +165,7 @@ fun createButton() {
           put("carisma", character.carisma)
         }
 
-        val newRowId = db.insert(dbHelper.CHARACTER_DATABASE_NAME, null, values)
+        val newRowId = db.insert(dbHelper.CHARACTER_TABLE_NAME, null, values)
         println(newRowId);
         db.close();
         //
